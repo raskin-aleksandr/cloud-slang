@@ -7,7 +7,7 @@
 #
 ####################################################
 #
-#   this flow builds the slang-cli
+#   this flow builds the cloudslang-cli
 #
 #    Inputs:
 #      - target_dir - the directory to create the artifacts in
@@ -23,9 +23,9 @@ flow:
   inputs:
     - target_dir: "'target'"
     - target_cli:
-        default: 'target_dir + "/slang-cli/slang"'
+        default: 'target_dir + "/cloudslang-cli/cslang"'
         overridable: false
-    - slang_content_repo:
+    - cloudslang_content_repo:
         default: "'https://github.com/CloudSlang/cloud-slang-content.git'"
         overridable: false
   name: build_cli_flow
@@ -35,12 +35,12 @@ flow:
           files.create_folder:
             - folder_name: target_dir
 
-    - get_slang_content:
+    - get_cloudslang_content:
         do:
-          build_content.get_slang_content:
-            - url: slang_content_repo
+          build_content.get_cloudslang_content:
+            - url: cloudslang_content_repo
             - target_dir:
-                default:  target_dir + "/slang_content"
+                default:  target_dir + "/cloudslang_content"
                 overridable: false
 
     - copy_verifier:
@@ -48,32 +48,32 @@ flow:
               cmd.run_command:
                 - command: >
                     "cp ../score-lang-content-verifier/target/*-jar-with-dependencies.jar " +
-                    target_dir + "/slang-content-verifer.jar"
+                    target_dir + "/cloudslang-content-verifer.jar"
 
     - run_verifier:
         do:
           cmd.run_command:
             - command: >
-                "java -jar " +
-                target_dir + "/slang-content-verifer.jar " +
-                target_dir + "/slang_content/content/"
+                "bash " +
+                target_dir + "/cslang-builder/bin/cslang-builder " +
+                target_dir + "/cloudslang_content/content/"
 
-    - copy_slang_cli:
+    - copy_cloudslang_cli:
         do:
           files.copy:
-            - source: "'../score-lang-cli/target/slang/'"
+            - source: "'../score-lang-cli/target/cslang/'"
             - destination: target_cli
 
-    - copy_content_to_slang_cli:
+    - copy_content_to_cloudslang_cli:
         do:
           files.copy:
-            - source: target_dir + '/slang_content/content'
+            - source: target_dir + '/cloudslang_content/content'
             - destination: target_cli + '/content'
 
-    - copy_python_lib_to_slang_cli:
+    - copy_python_lib_to_cloudslang_cli:
         do:
           files.copy:
-            - source: target_dir + '/slang_content/python-lib'
+            - source: target_dir + '/cloudslang_content/python-lib'
             - destination: target_cli + '/python-lib'
 
 #    - precompile_jython_standalone
@@ -85,19 +85,19 @@ flow:
                 "pip install -t " + target_cli + "/python-lib " +
                 "-r " + target_cli + "/python-lib/requirements.txt --compile"
 
-    - chmod_slang_exec:
+    - chmod_cloudslang_exec:
         do:
           cmd.run_command:
             - command: >
-                "chmod +x " + target_cli + "/bin/slang"
+                "chmod +x " + target_cli + "/bin/cslang"
 
 #    - add_docs
 
     - create_zip:
         do:
           files.zip_folder:
-            - archive_name: "'slang-cli'"
-            - folder_path: 'target_dir + "/slang-cli"'
+            - archive_name: "'cloudslang-cli'"
+            - folder_path: 'target_dir + "/cloudslang-cli"'
             - output_folder: target_dir
 
 

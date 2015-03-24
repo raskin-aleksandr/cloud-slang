@@ -1,17 +1,8 @@
 language: java
-
-before_deploy: >
-  sudo apt-get install python-pip &&
-  ant -f build/ant.xml
 deploy:
   provider: releases
   api_key:
-    secure: XUEVH4recWuA+xxjmy+AXeUSEZINSSeDe5xOALAr7rH3DvYGMV2tC4vO33zmOfyevnn2FxiDJLQqewlc/x9cComjCsuBXys8eMXaoEaFB6UIayBx0iilNQ56ItYnbAXz580/oDvJEVPAzXyGuOLhkW7qvwbVq0fXNauAMRUKrYY=
-  file:
-    - build/target/slang-cli.zip
-    - build/target/slang-content-verifer.jar
-  skip_cleanup: true
+    secure: exya/16wbwuMpDlwxrEDP7GfPrdeVzn1Z+dZ5aBDD0Je52cDxJWFT9bzSqiJ+UIIukIbV5RdNZ6VHwkoBszd2mgwOJ0dumYdoi5mHa/4JSwjIIz/JZfg/E36NACELujFp3GESzSwPWKpEP4SdYHLlli2b2cVuBqL9wy5GjB6hfg=
+  file: abc
   on:
-    repo: CloudSlang/cloud-slang
-    tags: true
-    branch: master
+    repo: raskin-aleksandr/cloud-slang
